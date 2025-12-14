@@ -4,7 +4,6 @@
 https://www.youtube.com/watch?v=FcblQjgaDXM
 
 
-http://72.60.101.202:8080/
 
 ###
 Deploy Spring Boot project to Hostinger VPS
@@ -26,10 +25,10 @@ apache2 -v -v
 
 ##>> go to eclipse and open terminal then use this command to upload jar file to VPS : 
 
-scp myweb.jar root@72.60.101.202:/home/jagatbondu
+scp myweb.jar root@88.99.999.9889:/home/jagatbondu
 
 
-scp myweb.jar root@72.60.101.202:/joyjagatbondu
+scp myweb.jar root@88.88.101.2144:/joyjagatbondu
 myweb.jar
 
 VPS
@@ -54,7 +53,6 @@ sudo usermod -aG ubuntu www-data
 
 
 
-72.60.101.202  
 dtechnologies.service
 
 

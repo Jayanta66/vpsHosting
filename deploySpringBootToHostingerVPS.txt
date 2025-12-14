@@ -1,0 +1,102 @@
+
+/home/ubuntu/joyjagatbondu/sprng-0.0.1-SNAPSHOT.jar
+
+https://www.youtube.com/watch?v=FcblQjgaDXM
+
+
+http://72.60.101.202:8080/
+
+###
+Deploy Spring Boot project to Hostinger VPS
+####
+
+First instsll mysql , jdk , apache2
+
+apt install mysql-server
+
+mysql -V
+
+apt install default-jdk
+
+java --version
+
+apt install apache2
+
+apache2 -v -v
+
+##>> go to eclipse and open terminal then use this command to upload jar file to VPS : 
+
+scp myweb.jar root@72.60.101.202:/home/jagatbondu
+
+
+scp myweb.jar root@72.60.101.202:/joyjagatbondu
+myweb.jar
+
+VPS
+https://www.youtube.com/watch?v=FcblQjgaDXM
+
+/joyjagatbondu.com/vps/target/sprng-0.0.1-SNAPSHOT.jar
+
+sudo mkdir jagatbondu
+
+
+sudo chown -R www-data:www-data /home/ubuntu/vps/target
+
+sudo chmod 755 /home/ubuntu/vps/target
+
+
+la -la
+
+sudo usermod -aG root www-data
+
+sudo usermod -aG ubuntu www-data
+
+
+
+
+72.60.101.202  
+dtechnologies.service
+
+
+jagatbondu
+
+cd /etc/systemd/system
+
+sudo nano dtechnologies.service
+
+or
+
+sudo nano /etc/systemd/system/dtechnologies.service
+
+###################
+
+[Unit]
+
+Description=Spring Boot web Application
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/home/ubuntu/vps/target
+ExecStart=/usr/bin/java -jar /home/ubuntu/vps/target
+SuccessExitStatus=143
+Restart=always
+RestartSec=10
+Environment="JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64"
+Environment="SPRING_PROFILE_ACTIVE=prod"
+
+[Install]
+WantedBy=Multi-usr.target
+
+###############
+
+jagatbondu
+
+sudo systemctl daemon-reload
+
+sudo systemctl start dtechnologies.service
+
+sudo systemctl status dtechnologies.service
+
+journalctl -u dtechnologies.service -f

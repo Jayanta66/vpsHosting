@@ -25,7 +25,7 @@ apache2 -v -v
 
 ##>> go to eclipse and open terminal then use this command to upload jar file to VPS : 
 
-scp myweb.jar root@88.99.999.9889:/home/jagatbondu
+scp myweb.jar root@72.60.101.202:/home/jagatbondu
 
 
 scp myweb.jar root@88.88.101.2144:/joyjagatbondu
@@ -91,7 +91,11 @@ WantedBy=Multi-usr.target
 
 jagatbondu
 
+sudo systemctl stop dtechnologies.service
+
+
 sudo systemctl daemon-reload
+
 
 sudo systemctl start dtechnologies.service
 
@@ -126,13 +130,15 @@ CREATE USER 'vps'@'72.60.101.202' IDENTIFIED BY '12345678@Jay';
 GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
 
 
-GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD ON *.* TO 'vps'@'72.60.101.202' WITH GRANT OPTION;
+GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD ON *.* TO 'vps'@'%' WITH GRANT OPTION;
 
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
 
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
 
 FLUSH PRIVILEGES;
+
+GRANT ALL PRIVILEGES ON mydb.* TO 'vps'@'%' IDENTIFIED BY '12345678@Jay';
 
 
 cd /etc/mysql/mysql.conf.d/
@@ -160,3 +166,61 @@ apt-get install ufw
 
 
 sudo ufw allow from 72.60.101.202 to any port 3306
+
+
+
+message from server: "Host '152.58.179.188' is not allowed to connect to this MySQL server"
+
+
+GRANT ALL PRIVILEGES ON *.* TO 'vps'@'152.58.179.188' IDENTIFIED BY '12345678@Jay';
+
+
+GRANT ALL PRIVILEGES ON *.* TO 'vps'@'%' IDENTIFIED BY '12345678@Jay';
+
+FLUSH PRIVILEGES;
+
+
+
+GRANT ALL PRIVILEGES ON *.* TO 'vps'@'*' WITH GRANT OPTION;
+
+
+GRANT ALL PRIVILEGES ON mydb.* TO 'vps'@'%' IDENTIFIED BY 'your_password';
+
+
+
+
+
+
+#############################################
+
+Deploying React in VPS
+
+https://www.youtube.com/watch?v=w3RFk35synM
+
+sudo apt install nodejs npm
+
+apt install nginx
+
+cd /var/www/html
+
+then you may see :
+
+index.nginx-debian.html
+
+now go the browser 
+
+and 
+
+88.88.101.2144/index.nginx-debian.html
+
+you may watch "welcome to nginx page"
+
+cp -r build/* /var/www/html
+
+now thats it
+
+
+
+
+
+

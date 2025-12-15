@@ -25,7 +25,7 @@ apache2 -v -v
 
 ##>> go to eclipse and open terminal then use this command to upload jar file to VPS : 
 
-scp myweb.jar root@72.60.101.202:/home/jagatbondu
+scp myweb.jar root@702.0.10.2:/home/jagatbondu
 
 
 scp myweb.jar root@88.88.101.2144:/joyjagatbondu
@@ -125,7 +125,7 @@ mysql_secure_installation
 
 
 
-CREATE USER 'vps'@'72.60.101.202' IDENTIFIED BY '12345678@Jay';
+CREATE USER 'vps'@'702.0.11.2' IDENTIFIED BY '12345678@Jay';
 
 GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
 
@@ -165,7 +165,7 @@ sudo systemctl restart mysql
 apt-get install ufw
 
 
-sudo ufw allow from 72.60.101.202 to any port 3306
+sudo ufw allow from 720.6.11.02 to any port 3306
 
 
 

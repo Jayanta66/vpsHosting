@@ -1,0 +1,57 @@
+To run multiple Spring Boot projects on a single Virtual Private Server (VPS), the most common and robust approach is to package each application as a separate executable JAR file and run them as independent processes, typically using different server ports. 
+Here is a step-by-step guide on how to achieve this:
+Prerequisites
+A provisioned Linux VPS (e.g., Ubuntu, CentOS).
+SSH access to the VPS.
+Java Development Kit (JDK) installed on the VPS (ensure the version matches your projects' requirements).
+Your Spring Boot projects built into executable JAR files (using mvn clean install or ./gradlew build). 
+Step 1: Transfer JAR files to the VPS
+Use a tool like scp (Secure Copy Protocol) to transfer the executable JAR files from your local machine to the VPS. 
+bash
+scp /path/to/your/project1.jar username@vps_ip:/path/on/vps/project1.jar
+scp /path/to/your/project2.jar username@vps_ip:/path/on/vps/project2.jar
+Step 2: Configure Unique Ports 
+By default, Spring Boot applications run on port 8080. To run multiple applications simultaneously, each must use a unique port. You can specify the port when running the JAR file using a command-line argument. 
+Step 3: Run Each Application 
+SSH into your VPS and run each application as a separate background process. 
+Method A: Running Manually in the Background
+Use the java -jar command with the --server.port argument, and append & to run the process in the background. 
+bash
+cd /path/on/vps/
+
+# Run project 1 on port 8081
+java -jar project1.jar --server.port=8081 > project1.log 2>&1 &
+
+# Run project 2 on port 8082
+java -jar project2.jar --server.port=8082 > project2.log 2>&1 &
+The > projectX.log 2>&1 command redirects the output to a log file, and & runs it in the background. You can check running processes using jps or ps aux | grep java. 
+Method B: Running as a systemd Service (Recommended for Production) 
+For a more robust solution that ensures applications restart on boot or failure, configure each application as a systemd service. 
+Create a service file for each application (e.g., sudo nano /etc/systemd/system/project1.service).
+Add configuration similar to the following, specifying the unique port in the ExecStart line:
+ini
+[Unit]
+Description=Project 1 Spring Boot Application
+After=network.target
+
+[Service]
+User=your_username
+ExecStart=java -jar /path/on/vps/project1.jar --server.port=8081
+SuccessExitStatus=143
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+Enable and start the service:
+bash
+sudo systemctl enable project1.service
+sudo systemctl start project1.service
+sudo systemctl status project1.service
+ 
+Step 4: Use a Reverse Proxy (Optional, but Recommended)
+To access all applications on standard HTTP/HTTPS ports (80/443) and manage domain names, use a reverse proxy like Nginx. 
+Install Nginx on your VPS.
+Configure Nginx to forward traffic from specific domain names or URL paths to the internal ports (8081, 8082, etc.). 
+This allows you to access app1.yourdomain.com (which internally connects to localhost:8081) and app2.yourdomain.com (which connects to localhost:8082). This setup also makes it easier to manage SSL certificates with tools like Certbot. 
+Alternative: Containerization with Docker 
+A modern and highly recommended approach is to use Docker and Docker Compose. Each Spring Boot application runs in its own isolated container, making resource management and deployment consistent across environments. You would define a docker-compose.yml file to manage and link the services. 

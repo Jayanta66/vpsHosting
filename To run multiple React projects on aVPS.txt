@@ -1,0 +1,65 @@
+To run multiple React projects on a single VPS, you should use a web server like Nginx as a reverse proxy and configure each project to run on a different port or be accessible via a different domain/subdomain. 
+Prerequisites
+A running VPS (typically Ubuntu).
+SSH access to your VPS.
+Node.js, npm, Git, and Nginx installed on your server.
+Your React projects pushed to a repository (e.g., GitHub). 
+Steps to Deploy Multiple React Projects
+1. Set Up and Secure Your VPS 
+Connect via SSH: ssh your_username@your_server_ip.
+Update server packages: sudo apt update && sudo apt upgrade -y.
+Set up a firewall and allow essential traffic:
+bash
+sudo ufw enable
+sudo ufw allow ssh
+sudo ufw allow 'Nginx Full'
+ 
+2. Clone and Build Your Projects
+Clone your projects to the VPS (e.g., in the /var/www/ directory) and build their static files: 
+bash
+cd /var/www
+sudo git clone github.com
+sudo git clone github.com
+
+cd project1
+npm install
+npm run build # this generates a 'build' or 'dist' folder
+
+cd ../project2
+npm install
+npm run build
+ 
+3. Configure Nginx for Each Project
+Nginx will serve the static files from the build (or dist) folder of each project. You can access them via different domain names (e.g., project1.com, project2.com) or subdomains (e.g., p1.yourdomain.com, p2.yourdomain.com). 
+For different domain names:
+Create Nginx configuration files in /etc/nginx/sites-available/:
+bash
+sudo nano /etc/nginx/sites-available/project1.conf
+sudo nano /etc/nginx/sites-available/project2.conf
+Add the following configuration to project1.conf (adjust paths as needed):
+nginx
+server {
+    listen 80;
+    server_name project1.com www.project1.com;
+    root /var/www/project1/build; # or /var/www/project1/dist
+    index index.html;
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+Add a similar configuration to project2.conf, using project2.com as the server_name. 
+4. Enable Sites and Restart Nginx 
+Enable the configurations by creating symbolic links to the sites-enabled directory and restart Nginx: 
+bash
+sudo ln -s /etc/nginx/sites-available/project1.conf /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/project2.conf /etc/nginx/sites-enabled/
+# Optionally remove the default config:
+sudo unlink /etc/nginx/sites-enabled/default
+
+sudo nginx -t # Test Nginx configuration for errors
+sudo systemctl restart nginx
+ 
+5. Update DNS Records
+Finally, ensure your domain names' DNS records point to your VPS's IP address. This step must be done with your domain name registrar or DNS provider. 
+Alternative: Docker 
+For a more scalable and isolated approach, you can use Docker and Docker Compose to containerize each React application. This ensures that dependencies for each project don't conflict and simplifies management. You would use a reverse proxy like Nginx Proxy Manager or Traefik within Docker to route traffic to the correct container. 

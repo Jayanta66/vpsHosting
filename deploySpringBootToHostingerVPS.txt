@@ -98,3 +98,65 @@ sudo systemctl start dtechnologies.service
 sudo systemctl status dtechnologies.service
 
 journalctl -u dtechnologies.service -f
+
+
+
+
+
+#################################################
+
+
+
+mysql in VPS
+
+apt install mysql-server
+
+sudo systemctl start mysql.service
+
+sudo mysql 
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '12345678@Jay123'; 
+
+mysql_secure_installation
+
+
+
+CREATE USER 'vps'@'72.60.101.202' IDENTIFIED BY '12345678@Jay';
+
+GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+
+
+GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD ON *.* TO 'vps'@'72.60.101.202' WITH GRANT OPTION;
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
+
+FLUSH PRIVILEGES;
+
+
+cd /etc/mysql/mysql.conf.d/
+
+
+sudo nano mysqld.cnf
+
+
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+
+find out :
+
+"bind-address =  127.0.0.1"
+
+and change it to 
+
+"bind-address =  127.0.0.1"
+
+and save it .
+
+
+sudo systemctl restart mysql
+
+apt-get install ufw
+
+
+sudo ufw allow from 72.60.101.202 to any port 3306
